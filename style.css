@@ -1,0 +1,213 @@
+
+@font-face { 
+  font-family: Poppins;
+  src: url('Poppins-Medium.ttf');
+}
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: Poppins;
+  background: linear-gradient(skyblue, deepskyblue);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+button:hover {
+  background-color: lightgray;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 2px 7px;
+}
+
+button:active {
+  background-color: slategray;
+}
+
+dialog {
+  border: 0;
+  outline: 1px dotted rgba(0, 0, 0, 0.5);
+  border-radius: 25px;
+}
+
+main {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+#panel {
+  background-color: white;
+  padding: 15px;
+  height: min-content;
+  width: 200px;
+}
+
+#shelves-container {
+  width: 100%;
+}
+
+#shelves {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  width: max-content;
+  gap: 30px;
+  padding: 20px;
+  height: 100%;
+}
+
+.shelf {
+  background-color: white;
+  width: 500px;
+  height: 90vh;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0;
+  outline: 2px solid black;
+}
+
+.panel {
+  outline: 1px solid black;
+  height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.shelf-info {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px;
+  outline: 1px solid black;
+  display: flex;
+  justify-content: space-around;
+}
+
+.shelf-info > div > svg {
+  cursor: pointer;
+}
+
+.shelf-item {
+  outline: 1px solid black;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.shelf-item:has(> :nth-child(2)) > .shelf-product {
+  font-size: medium;
+}
+
+.shelf-item:has(> :nth-child(5)) > .shelf-product {
+  font-size: small;
+}
+
+.shelf-item:has(> :nth-child(20)) > .shelf-product {
+  font-size: smaller;
+}
+
+.shelf-item:has(> :nth-child(21)) > .shelf-product {
+  font-size: x-small;
+}
+
+.shelf-item:has(> :nth-child(22)) > .shelf-product {
+  font-size: xx-small;
+}
+
+.shelf-item-extra {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 3px;
+}
+
+.add-panel-button {
+  height: 100%;
+  border: 0;
+  border: 1px solid black;
+  border-right: 0;
+}
+
+.add-panel-button:hover {
+  border-right: 0;
+  padding: 1px 6px;
+}
+
+.shelf-product {
+  outline: 1px dotted rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hover-product {
+  background-color: white;
+}
+
+.hover-product:hover {
+  background-color: lavender;
+}
+
+.shelf-product:hover {
+  background-color: lavender;
+}
+
+.modal-product {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 0;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.5);
+}
+
+.modal-product:last-of-type {
+  border-bottom: 0;
+}
+
+.modal-product-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-product-barcode {
+  font-size: smaller;
+  color: gray;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+#mass-takeout-panel {
+  padding: 10px;
+}
+
+#mass-takeout-input {
+  max-width: 300px;
+  max-height: 400px;
+  overflow: scroll;
+  resize: none;
+}
+
+.dragging {
+  opacity: .5;
+}
