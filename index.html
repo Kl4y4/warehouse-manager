@@ -20,43 +20,59 @@
 </head>
 <body>
   <main>
-    <a href="app.html">go to app</a>
     <form id="login-form">
-      Imię: <br /><input type="text">
-      Nazwisko: <br /><input type="password">
+      Imię: <br /><input type="text" id="login-inp">
+      Nazwisko: <br /><input type="password" id="pass-inp">
       <button>Zaloguj</button>
     </form>
-    <input type="text" id="test">
-    <button id="test-btn">test</button>
+    <!-- <input type="text" id="test">
+    <button id="test-btn">test</button> -->
   </main>
   <script>
 
-    const login = 'bartek4'
     const pass = '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
 
-    let ciphertext
-    let keyPair
+    // let ciphertext
+    // let keyPair
 
     const form = document.querySelector('#login-form')
-    const testInp = document.querySelector('#test')
-    document.querySelector('#test-btn').addEventListener("click", async () => doStuff())
+    form.addEventListener("submit", () => login())
+    const loginInp = document.querySelector('#login-inp')
+    const passInp = document.querySelector('#pass-inp')
 
-    async function doStuff() {
+    // const testInp = document.querySelector('#test')
+    // document.querySelector('#test-btn').addEventListener("click", async () => doStuff())
 
+    async function login() {
       const encoder = new TextEncoder();
-      const decoder = new TextDecoder();
-      const data = encoder.encode(testInp.value);
+      const data = encoder.encode(passInp.value);
       const hash = await crypto.subtle.digest("SHA-256", data);
-      
+
       const hashArray = Array.from(new Uint8Array(hash))
 
       const hashHex = hashArray
         .map((b) => b.toString(16).padStart(2, "0"))
-        .join(""); // convert bytes to hex string
+        .join("");
       
-      if (login === 'bartek4' && hashHex === pass) window.location.href = '/index.html'
-
+      if (loginInp.value === 'bartek4' && hashHex === pass) window.location.href = '/warehouse-manager/app.html'
+      else alert("Nieprawidłowe hasło.")
     }
+
+    // async function doStuff() {
+
+    //   const encoder = new TextEncoder();
+    //   const data = encoder.encode(testInp.value);
+    //   const hash = await crypto.subtle.digest("SHA-256", data);
+      
+    //   const hashArray = Array.from(new Uint8Array(hash))
+
+    //   const hashHex = hashArray
+    //     .map((b) => b.toString(16).padStart(2, "0"))
+    //     .join(""); // convert bytes to hex string
+      
+    //   if (login === 'bartek4' && hashHex === pass) window.location.href = '/warehouse-manager/app.html'
+
+    // }
 
     // async function doStuff() {
     //   keyPair = await window.crypto.subtle.generateKey(
