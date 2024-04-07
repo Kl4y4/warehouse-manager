@@ -1,0 +1,4 @@
+Strona, którą wykonałem dla mojego przyjaciela. Potrzebą było jej szybkie wykonanie oraz jak najmniejsze zużycie zasobów, by odpalić to na (naprawdę) starym sprzęcie, dlatego też zdecydowałem się to wykonać w czystym JavaScript. Mam pojęcie o wielu błędach, które popełniłem przy wykonywaniu tej strony, lecz jednak jest to skończony produkt i uważam, że może być przydatny - podziękowali mi nawet jego koledzy z pracy :).  
+
+
+A website I made for a friend of mine. The need was to get it done quickly and to use as little resources as possible to fire this up on some (really) old hardware, so I decided to do it in vanilla JavaScript. I have an idea of the many mistakes I made in making this site, but nevertheless it is a finished product and I think it can be useful - even his work colleagues thanked me :). 
