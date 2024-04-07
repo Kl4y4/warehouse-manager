@@ -5,844 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Warehouse Manager</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  </style>
 </head>
 <body>
-
-  <script>
-
-    let sizes = ['xs', 's', 'm', 'l']
-
-    let currentShelfInfo = {
-      currentRowUnitObj : {},
-      shelfNumber: 0,
-      panelNumber: 0,
-      rowUnitNumber: 0,
-      productName: '',
-    }
-
-    let dragEventInfo = {
-      shelfIndex: 0,
-      panelNumber: 0,
-      unitIndex: 0,
-      productName: '',
-    }
-
-    const shelves = JSON.parse(window.localStorage.getItem('shelves')) || [
-      {
-        name: 'A1',
-        panels: {
-          1: []
-        }
-      }
-    ]
-
-    // const shelves = [
-    //   {
-    //     name: 'A1',
-    //     panels: {
-    //       1: [
-    //         [
-    //           {
-    //             name: 'dr04031',
-    //             size: 'm',
-    //             barcode: 123
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 'l',
-    //             barcode: 690
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 's',
-    //             barcode: 234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //         ],
-    //         [
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'l',
-    //             barcode: 154
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 's',
-    //             barcode: 857
-    //           },
-    //         ],
-
-    //       ],
-    //       2: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ],
-    //       3: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ],
-    //       4: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ],
-    //       5: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ],
-    //       6: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ],
-    //     }
-    //   },
-    //   {
-    //     name: 'A2',
-    //     panels: {
-    //       1: [
-    //         [
-    //           {
-    //             name: 'dr04031',
-    //             size: 'm',
-    //             barcode: 123
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 'l',
-    //             barcode: 690
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 's',
-    //             barcode: 234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //         ],
-    //         [
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 1234567891234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'l',
-    //             barcode: 1234567891234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 's',
-    //             barcode: 1234567891234
-    //           },
-    //         ],
-
-    //       ],
-    //       2: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     name: 'B1',
-    //     panels: {
-    //       1: [
-    //         [
-    //           {
-    //             name: 'dr04031',
-    //             size: 'm',
-    //             barcode: 123
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 'l',
-    //             barcode: 690
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 's',
-    //             barcode: 234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //         ],
-    //         [
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'l',
-    //             barcode: 154
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 's',
-    //             barcode: 857
-    //           },
-    //         ],
-
-    //       ],
-    //       2: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ]
-    //     }
-    //   },
-    //   {
-    //     name: 'B2',
-    //     panels: {
-    //       1: [
-    //         [
-    //           {
-    //             name: 'dr04031',
-    //             size: 'm',
-    //             barcode: 123
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 'l',
-    //             barcode: 690
-    //           },
-    //           {
-    //             name: 'dr04031',
-    //             size: 's',
-    //             barcode: 234
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //         ],
-    //         [
-    //           {
-    //             name: 'skr0305',
-    //             size: 'm',
-    //             barcode: 908
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 'l',
-    //             barcode: 154
-    //           },
-    //           {
-    //             name: 'skr0305',
-    //             size: 's',
-    //             barcode: 857
-    //           },
-    //         ],
-
-    //       ],
-    //       2: [
-    //         [
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 849
-    //           },
-    //           {
-    //             name: 'dr0420',
-    //             size: 'm',
-    //             barcode: 420
-    //           },
-    //         ]
-    //       ]
-    //     }
-    //   },
-    // ]
-
-    function DrawShelves() {
-
-      SaveShelvesState()
-
-      let shelvesHtml = '<div id="shelves">'
-      
-      shelves.forEach((el, shelfIndex) => {
-        
-        const panelsCount = Object.keys(el.panels).length
-        shelvesHtml += `<div class="shelf">`
-        shelvesHtml += `<span class="shelf-info">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" onclick="RenameShelf(${shelfIndex}, '${el.name}')">
-            <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z"/>
-          </svg>
-          ${el.name}
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" onclick="MoveShelf(${shelfIndex}, ${shelfIndex - 1})">
-              <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" onclick="DeleteShelf(${shelfIndex})">
-              <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" onclick="MoveShelf(${shelfIndex}, ${shelfIndex + 1})">
-              <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-            </svg>
-          </div>
-        </span>`
-
-        Object.entries(el.panels).forEach((row) => {
-
-          shelvesHtml += '<div class="panel">'
-
-          row[1].forEach((rowUnit, rowUnitIndex) => {
-            // shelfNumber, panelNumber, unitIndex
-            shelvesHtml += `<div class="shelf-item" ondragover="ShelfItemDragOver(event, ${shelfIndex}, ${row[0]}, ${rowUnitIndex})" ondrop="ShelfItemDrop(event, ${shelfIndex}, ${row[0]}, ${rowUnitIndex})">`
-
-            shelvesHtml += `<div class="shelf-item-extra">
-              <span>Dodaj produkt</span>
-                <button onclick="ShowAddProductModal(${shelfIndex}, ${row[0]}, ${rowUnitIndex})">
-                  +
-                </button>
-              </div>`
-
-            namesList = []
-            rowUnit.reduce((productNames, currentProduct) => namesList.push(currentProduct.name), namesList)
-            
-            namesSet = new Set(namesList)
-
-            if (namesSet.size == 0) {
-              shelvesHtml += `<div class="shelf-item-extra">
-                <span>Usuń przegrodę</span>
-                <button onclick="DeleteRowUnit(${shelfIndex}, ${row[0]}, ${rowUnitIndex})">
-                  -
-                </button>
-              </div>`
-            }
-
-            namesSet.forEach((name) => {
-              shelvesHtml += 
-              `<span class="shelf-product" onclick="ShowItemsModal(${shelfIndex}, ${row[0]}, ${rowUnitIndex}, '${name}')" ondragstart="ProductDragStart(event, ${shelfIndex}, ${row[0]}, ${rowUnitIndex}, '${name}')" ondragend="ProductDragEnd(event, ${shelfIndex}, ${row[0]}, ${rowUnitIndex}, '${name}')" draggable="true">
-                ${name}
-              </span>`
-            })
-  
-            shelvesHtml += '</div>'
-
-          })
-  
-          shelvesHtml += `<button class="add-panel-button" onclick="AddRowUnit(${shelfIndex}, ${row[0]})"> + </button>`
-          shelvesHtml += '</div>'
-  
-        })
-
-        shelvesHtml += '</div>'
-
-      })
-
-      shelvesContainer.innerHTML = shelvesHtml + '</div>'
-    
-    }
-
-    function ShowItemsModal(shelfNumber, panelNumber, unitIndex, productName) {
-
-      currentShelfInfo.currentRowUnitObj = shelves[shelfNumber].panels[panelNumber][unitIndex].filter((el) => el.name === productName)
-
-      if (currentShelfInfo.currentRowUnitObj[0].name.includes('jns')) {
-        currentShelfInfo.currentRowUnitObj.sort(SortJeansBySize)
-      } else {
-        currentShelfInfo.currentRowUnitObj.sort(SortBySize)
-      }
-
-      currentShelfInfo.shelfNumber = shelfNumber
-      currentShelfInfo.panelNumber = panelNumber
-      currentShelfInfo.rowUnitNumber = unitIndex
-      currentShelfInfo.productName = productName
-
-      BuildRowUnitModalHtml()
-
-      rowUnitDialog.showModal()
-
-    }
-
-    function SortJeansBySize(a, b) {
-
-      if (a.size < b.size) {
-        return -1
-      } else if (a.size > b.size) {
-        return 1
-      }
-
-      return 0
-
-    }
-
-    function SortBySize(a, b) {
-
-      if (sizes.indexOf(a.size) < sizes.indexOf(b.size)) {
-        return -1
-      } else if (sizes.indexOf(a.size) > sizes.indexOf(b.size)) {
-        return 1
-      }
-
-      return 0
-
-    }
-    
-    function BuildRowUnitModalHtml() {
-
-      let dialogHtml = '<div class="dialog-content">'
-      
-      currentShelfInfo.currentRowUnitObj.forEach((product, index) => {
-        dialogHtml += `<div class="modal-product">
-          <span class="modal-product-name">
-            ${product.name} - ${product.size.toUpperCase()}
-            <span class="modal-product-barcode">${product.barcode}</span>
-          </span>
-          <button onclick="DeleteProduct('${index}')">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="rgb(52, 52, 52)" height="24" viewBox="0 -960 960 960" width="24"><path d="M80-240v-480h80v480H80Zm560 0-57-56 144-144H240v-80h487L584-664l56-56 240 240-240 240Z"/></svg>
-          </button>
-        </div>`
-      })
-
-      dialogHtml += '<button onclick="rowUnitDialog.close()">Zamknij okno</button></div>'
-
-      rowUnitDialog.innerHTML = dialogHtml
-
-    }
-
-    function DeleteProduct(index) {
-
-      currentShelfInfo.currentRowUnitObj.splice(index, 1)
-      BuildRowUnitModalHtml()
-
-      const { shelfNumber, panelNumber, rowUnitNumber, productName } = currentShelfInfo
-
-      const otherProducts = shelves[shelfNumber].panels[panelNumber][rowUnitNumber].filter((el) => el.name !== productName)
-
-      shelves[shelfNumber].panels[panelNumber][rowUnitNumber] = currentShelfInfo.currentRowUnitObj.concat(otherProducts)
-
-      SaveShelvesState()
-
-      if (!currentShelfInfo.currentRowUnitObj.length) {
-
-        shelves[shelfNumber].panels[panelNumber][rowUnitNumber] = shelves[currentShelfInfo.shelfNumber].panels[panelNumber][rowUnitNumber].filter((el) => el.name !== productName)
-
-        DrawShelves()
-
-        rowUnitDialog.close()
-
-      }
-
-    }
-
-    function ShowAddProductModal(shelfNumber, panelNumber, unitIndex) {
-
-      let addProductDialogHtml = '<div>'
-
-      addProductDialogHtml += `<form method='dialog' name='adding-form' onsubmit="AddProduct(${shelfNumber}, ${panelNumber}, ${unitIndex})">
-        <label>Kod: <input type="text" name="name" minLength="7" maxLength="7" required></label>
-        <label>Rozmiar: <input type="text" name="size" maxLength="6" required></label>
-        <label>Kod kreskowy: <input type="text" name="barcode" id="dialog-barcode-input" minLength="13" maxLength="13" pattern="\[0-9]{13}" required></label>
-        <label>Ilość: <input type='number' name='count' value='1' min='1' max='9' required></label>
-        <div>
-          <button type='submit'>Dodaj</button>
-          <button type='button' onclick="addProductDialog.close()"> Anuluj </button>
-        </div>
-      </form>`
-
-      addProductDialogHtml += '</div>'
-
-      addProductDialog.innerHTML = addProductDialogHtml
-
-      addProductDialog.showModal()
-
-    }
-
-    function AddProduct(shelfIndex, panelNumber, unitIndex) {
-
-      const COUNT_INDEX_IN_FORM_ELEMENTS = 3
-
-      const productToAdd = {}
-
-      const formElements = Array.from(document.forms['adding-form'].elements)
-
-      for (let i = 0; i < formElements.length; i++) {
-        if (formElements[i].type === 'submit' || formElements[i].type === 'button') continue
-        if (!formElements[i].value) {
-          return
-        }
-      }
-
-      const newProduct = {
-        name: formElements[0].value,
-        size: formElements[1].value.toLowerCase(),
-        barcode: formElements[2].value,
-      }
-
-      for (let j = 0; j < formElements[COUNT_INDEX_IN_FORM_ELEMENTS].value; j++) {
-        shelves[shelfIndex].panels[panelNumber][unitIndex].push(newProduct)
-      }
-
-      DrawShelves()
-
-    }
-
-    function DeleteRowUnit(shelfIndex, panelNumber, unitIndex) {
-      shelves[shelfIndex].panels[panelNumber].splice(unitIndex, 1)
-      DrawShelves()
-    }
-
-    function AddRowUnit(shelfIndex, panelNumber) {
-      if (shelves[shelfIndex].panels[panelNumber].length >= 4) return
-      shelves[shelfIndex].panels[panelNumber].push([])
-      DrawShelves()
-    }
-
-    function DeleteShelf(shelfIndex) {
-      if (window.confirm(`Czy na pewno chcesz usunąć szafkę ${shelves[shelfIndex].name}?`)) {
-        shelves.splice(shelfIndex, 1)
-        DrawShelves()
-      }
-    }
-
-    function SearchForProduct() {
-
-      const allProducts = Array.from(document.querySelectorAll('.shelf-product'))
-
-      if (searchBarInput.value) {
-        const relevantProducts = allProducts.filter((el) => el.textContent.includes(searchBarInput.value))
-        relevantProducts.forEach((el) => {
-          el.style.backgroundColor = 'green'
-        })
-      }
-
-      if (!searchBarInput.value) {
-        allProducts.forEach((el) => {
-          el.style.backgroundColor = 'white'
-          DrawShelves()
-        })
-      }
-
-      const irrelevantProducts = allProducts.filter((el) => !el.textContent.includes(searchBarInput.value))
-
-      irrelevantProducts.forEach((el) => {
-        el.style.backgroundColor = 'white'
-      })
-
-    }
-
-    function ResetHighlighting() {
-
-      const allProducts = Array.from(document.querySelectorAll('.shelf-product'))
-      allProducts.forEach((el) => {
-        el.style.backgroundColor = 'white'
-      })
-
-      searchBarInput.value = null
-
-      DrawShelves()
-
-    }
-
-    function AddShelf() {
-
-      const name = shelfNameInput.value
-      const panelCount = shelfPanelCountInput.value
-
-      const panels = {}
-      for (let i = 0; i < panelCount; i++) {
-        panels[i] = []
-      }
-
-      shelves.push({
-        name,
-        panels
-      })
-
-      DrawShelves()
-
-    }
-
-    function SaveShelvesState() {
-      window.localStorage.setItem('shelves', JSON.stringify(shelves))
-    }
-
-    function TakeoutMultiple() {
-
-      const barcodes = massTakeoutInput.value.match(/.{1,13}/g)
-
-      barcodes.forEach((barcode) => {
-        DeleteByBarcode(barcode)
-      })
-
-      DrawShelves()
-
-      massTakeoutInput.value = null
-
-    }
-
-    function DeleteByBarcode(barcodeToDelete) {
-
-      for (let i = 0; i < shelves.length; i++) {
-
-        for (let j = 0; j < Object.keys(shelves[i].panels).length; j++) {
-
-          for (let k = 0; k < shelves[i].panels[j].length; k++) {
-
-            if (!shelves[i].panels[j][k]) continue
-
-            for (let l = 0; l < shelves[i].panels[j][k].length; l++) {
-
-              if (shelves[i].panels[j][k][l].barcode == barcodeToDelete) {
-                shelves[i].panels[j][k].splice(l, 1)
-                return
-              }
-
-            }
-
-          }
-
-        }
-
-      }
-
-    }
-
-    function ProductDragStart(event, shelfIndex, panelNumber, unitIndex, productName) {
-      event.target.classList.add('dragging')
-      dragEventInfo.shelfIndex = shelfIndex
-      dragEventInfo.panelNumber = panelNumber
-      dragEventInfo.unitIndex = unitIndex
-      dragEventInfo.productName = productName
-    }
-
-    function ProductDragEnd(event, shelfIndex, panelNumber, unitIndex, productName) {
-      event.target.classList.remove('dragging')
-    }
-
-    function ShelfItemDragOver(event, shelfIndex, panelNumber, unitIndex) {
-      const draggable = document.querySelector('.dragging')
-      const target = event.target
-      if (target.classList.contains('shelf-item')) {
-        event.preventDefault()
-        target.appendChild(draggable)
-      } else if (target.classList.contains('shelf-product')) {
-        event.preventDefault()
-        target.parentNode.appendChild(draggable)
-      }
-    }
-
-    function ShelfItemDrop(event, shelfIndex, panelNumber, unitIndex) {
-
-      let draggedProducts = []
-
-      let j = shelves[dragEventInfo.shelfIndex].panels[dragEventInfo.panelNumber][dragEventInfo.unitIndex].length
-      for (let i = 0; i < j; i++) {
-        if (shelves[dragEventInfo.shelfIndex].panels[dragEventInfo.panelNumber][dragEventInfo.unitIndex][i].name === dragEventInfo.productName) {
-          draggedProducts.push(shelves[dragEventInfo.shelfIndex].panels[dragEventInfo.panelNumber][dragEventInfo.unitIndex][i])
-          shelves[dragEventInfo.shelfIndex].panels[dragEventInfo.panelNumber][dragEventInfo.unitIndex].splice(i, 1)
-          i--
-          j--
-        }
-      }
-
-      draggedProducts.forEach((product) => {
-        shelves[shelfIndex].panels[panelNumber][unitIndex].push(product)
-      })
-
-      DrawShelves()
-
-    }
-
-    function MoveShelf(fromIndex, toIndex) {
-      if (toIndex < 0 || toIndex > shelves.length - 1) return
-      let element = shelves[fromIndex]
-      shelves.splice(fromIndex, 1)
-      shelves.splice(toIndex, 0, element)
-      DrawShelves()
-    }
-
-    function RenameShelf(shelfIndex, currentName) {
-      const newName = prompt('Wpisz nową nazwę szafki: ', currentName)
-      shelves[shelfIndex].name = newName
-      DrawShelves()
-    }
-
-  </script>
-
   <main>
-    <div id="panel">
-
-      <div id="search-panel">
-        <label>
-          Wyszukaj produkt: <input type="text" id="search-bar-input" onchange="SearchForProduct()">
-        </label>
-        <button onclick="SearchForProduct()">Wyszukaj</button>
-        <button onclick="ResetHighlighting()">Usuń zaznaczenie</button>
-      </div>
-
-      <hr>
-
-      <div id="add-shelf-panel">
-
-        <label>
-          Nazwa szafki: <input type="text" id="add-shelf-name" minlength="1" maxlength="40">
-          Ilość pięter: <input type="number" id="add-shelf-panel-count" min="1" max="10">
-        </label>
-
-        <button onclick="AddShelf()">Dodaj szafkę</button>
-
-      </div>
-
-      <hr>
-
-      <div>
-        <button onclick="massTakeoutDialog.showModal()">Wyjmij produkty</button>
-      </div>
-
-      <!-- <div id="logo-container">
-        <img src="cooltext.gif" id="logo">
-      </div> -->
-      <!-- <br><br><br><br><br><br> -->
-    </div>
-
-    <div id="shelves-container">
-      here gon be shelf
-    </div>
-  </main>
-  
-
-  <dialog id="row-unit-dialog">
-    content here :)
-  </dialog>
-  
-  <dialog id="add-product-dialog">
-    content here :)
-  </dialog>
-
-  <dialog id="mass-takeout-dialog">
-    <form id="mass-takeout-panel">
-      <textarea cols="13" rows="30" id="mass-takeout-input"></textarea>
-      <div>
-        <button onclick="TakeoutMultiple()">Wyjmij produkty</button>
-        <button>Anuluj</button>
-      </div>
+    <a href="app.html">go to app</a>
+    <form id="login-form">
+      Imię: <br /><input type="text">
+      Nazwisko: <br /><input type="password">
+      <button>Zaloguj</button>
     </form>
-  </dialog>
-
+    <input type="text" id="test">
+    <button id="test-btn">test</button>
+  </main>
   <script>
-    const shelvesContainer = document.querySelector('#shelves-container')
-    const rowUnitDialog = document.querySelector('#row-unit-dialog')
-    const addProductDialog = document.querySelector('#add-product-dialog')
 
-    const searchBarInput = document.querySelector('#search-bar-input')
+    const login = 'bartek4'
+    const pass = '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5'
 
-    const shelfNameInput = document.querySelector('#add-shelf-name')
-    const shelfPanelCountInput = document.querySelector('#add-shelf-panel-count')
+    let ciphertext
+    let keyPair
 
-    const massTakeoutInput = document.querySelector('#mass-takeout-input')
-    const massTakeoutDialog = document.querySelector('#mass-takeout-dialog')
+    const form = document.querySelector('#login-form')
+    const testInp = document.querySelector('#test')
+    document.querySelector('#test-btn').addEventListener("click", async () => doStuff())
 
-    DrawShelves()
+    async function doStuff() {
 
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+      const data = encoder.encode(testInp.value);
+      const hash = await crypto.subtle.digest("SHA-256", data);
+      
+      const hashArray = Array.from(new Uint8Array(hash))
+
+      const hashHex = hashArray
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(""); // convert bytes to hex string
+      
+      if (login === 'bartek4' && hashHex === pass) window.location.href = '/index.html'
+
+    }
+
+    // async function doStuff() {
+    //   keyPair = await window.crypto.subtle.generateKey(
+    //     {
+    //       name: "RSA-OAEP",
+    //       // Consider using a 4096-bit key for systems that require long-term security
+    //       modulusLength: 2048,
+    //       publicExponent: new Uint8Array([1, 0, 1]),
+    //       hash: "SHA-256",
+    //     },
+    //     true,
+    //     ["encrypt", "decrypt"]
+    //   )
+      
+    //   const enc = new TextEncoder()
+      
+    //   ciphertext = await window.crypto.subtle.encrypt(
+    //     {
+    //       name: "RSA-OAEP"
+    //     },
+    //     keyPair.publicKey,
+    //     enc.encode(testInp.value)
+    //   )
+
+    //   let buffer = new Uint8Array(ciphertext)
+
+    //   // console.log(buffer == pass)
+    //   console.log(pass)
+    //   console.log(buffer)
+
+    //   const dec = new TextDecoder()
+
+    //   ciphertext = await window.crypto.subtle.decrypt(
+    //     {
+    //       name: "RSA-OAEP"
+    //     },
+    //     keyPair.privateKey,
+    //     ciphertext
+    //   )
+
+    //   console.log(dec.decode(ciphertext))
+    //   document.write(buffer)
+
+    // }
+    
   </script>
-
 </body>
 </html>
